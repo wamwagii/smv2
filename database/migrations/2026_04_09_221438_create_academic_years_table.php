@@ -19,7 +19,6 @@ return new class extends Migration
             $table->timestamps();
             
             $table->unique(['school_id', 'name']);
-            $table->index(['school_id', 'is_current']);
         });
     }
 

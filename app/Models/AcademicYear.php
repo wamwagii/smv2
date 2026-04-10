@@ -28,4 +28,9 @@ class AcademicYear extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function classes()
+    {
+        return $this->hasMany(ClassRoom::class);
+    }
 }

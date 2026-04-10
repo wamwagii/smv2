@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\AcademicYearResource\Pages;
 
 use App\Filament\Resources\AcademicYearResource;
-use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ListRecords;
 
-class EditAcademicYear extends EditRecord
+class ListAcademicYears extends ListRecords
 {
     protected static string $resource = AcademicYearResource::class;
-    
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            CreateAction::make(),
         ];
     }
 }
