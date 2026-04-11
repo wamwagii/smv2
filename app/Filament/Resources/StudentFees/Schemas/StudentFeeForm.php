@@ -78,6 +78,25 @@ class StudentFeeForm
                 Textarea::make('notes')
                     ->maxLength(65535)
                     ->label('Notes'),
+Select::make('payment_method')
+    ->options([
+        'mpesa' => 'M-PESA',
+        'bank_equity' => 'Equity Bank',
+        'bank_coop' => 'Co-operative Bank',
+        'cash' => 'Cash',
+    ])
+    ->required()
+    ->live()
+    ->label('Payment Method')
+    ->helperText('Select payment method used'),
+
+TextInput::make('transaction_reference')
+    ->label('Transaction Reference')
+    ->placeholder('M-PESA Code or Bank Reference')
+    ->helperText('Required for M-PESA and Bank payments')
+    ->requiredIf('payment_method', 'mpesa')
+    ->requiredIf('payment_method', 'bank_equity')
+    ->requiredIf('payment_method', 'bank_coop'),
             ]);
     }
 }

@@ -16,6 +16,40 @@ class StudentFeesTable
     {
         return $table
             ->columns([
+                // Print receipt column - placed first for visibility
+                TextColumn::make('print_action')
+                    ->label('Print Receipt')
+                    ->getStateUsing(function ($record) {
+                        // Try to get or create receipt
+                        $receipt = \App\Models\Receipt::where('student_fee_id', $record->id)->first();
+                        
+                        if (!$receipt) {
+                            $payment = \App\Models\FeePayment::where('student_fee_id', $record->id)->first();
+                            if ($payment) {
+                                $receipt = \App\Models\Receipt::create([
+                                    'receipt_number' => \App\Models\Receipt::generateReceiptNumber(),
+                                    'student_fee_id' => $record->id,
+                                    'fee_payment_id' => $payment->id,
+                                    'amount' => $payment->amount,
+                                    'payment_method' => $payment->payment_method,
+                                    'transaction_reference' => $payment->transaction_reference,
+                                    'payment_date' => $payment->payment_date,
+                                    'printed_by' => null,
+                                    'printed_at' => now(),
+                                    'print_count' => 1,
+                                ]);
+                            }
+                        }
+                        
+                        if ($receipt) {
+                            return '<a href="' . route('receipt.print', $receipt) . '" target="_blank" style="color: #3b82f6; text-decoration: underline; font-weight: bold;">PRINT RECEIPT</a>';
+                        }
+                        
+                        return '<span style="color: #9ca3af;">No payment</span>';
+                    })
+                    ->html()
+                    ->toggleable(false), // Force it to always be visible
+                
                 TextColumn::make('student.full_name')
                     ->label('Student')
                     ->searchable()

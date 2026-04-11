@@ -27,6 +27,11 @@ class FeePayment extends Model
         'amount' => 'decimal:2',
     ];
 
+public function receipt()
+{
+    return $this->hasOne(Receipt::class);
+}
+
     // Relationship: A payment belongs to a student fee record
     public function studentFee()
     {
