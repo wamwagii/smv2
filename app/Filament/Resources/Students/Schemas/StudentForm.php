@@ -8,6 +8,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Schema as SchemaFacade;
 
 class StudentForm
 {
@@ -19,7 +20,40 @@ class StudentForm
                     ->relationship('school', 'name')
                     ->required()
                     ->searchable()
+                    ->preload()
+                    ->live() // Makes the field reactive
+                    ->afterStateUpdated(fn ($set) => $set('class_room_id', null)) // Reset class when school changes
                     ->label('School'),
+                
+                Select::make('class_room_id')
+                    ->label('Class')
+                    ->options(function ($get) {
+                        $schoolId = $get('school_id');
+                        if (!$schoolId) {
+                            return [];
+                        }
+                        
+                        // Get all active classes for the selected school
+                        return \App\Models\ClassRoom::where('school_id', $schoolId)
+                            ->where('is_active', true)
+                            ->with('academicYear')
+                            ->get()
+                            ->mapWithKeys(function ($class) {
+                                $label = $class->name . ' (' . $class->code . ')';
+                                if ($class->academicYear) {
+                                    $label .= ' - ' . $class->academicYear->name;
+                                }
+                                // Show current enrollment count
+                                $enrolledCount = $class->students()->count();
+                                $label .= " [{$enrolledCount}/{$class->capacity}]";
+                                return [$class->id => $label];
+                            });
+                    })
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('First select a school')
+                    ->helperText('Only active classes from the selected school are shown. Shows current enrollment vs capacity.')
+                    ->live(),
                 
                 TextInput::make('admission_number')
                     ->required()
@@ -59,6 +93,7 @@ class StudentForm
                 
                 DatePicker::make('enrollment_date')
                     ->required()
+                    ->default(now())
                     ->label('Enrollment Date'),
                 
                 Textarea::make('address')
@@ -68,9 +103,11 @@ class StudentForm
                     ->label('City/Town'),
                 
                 TextInput::make('parent_name')
+                    ->required()
                     ->label('Parent/Guardian Name'),
                 
                 TextInput::make('parent_phone')
+                    ->required()
                     ->tel()
                     ->label('Parent/Guardian Phone'),
                 

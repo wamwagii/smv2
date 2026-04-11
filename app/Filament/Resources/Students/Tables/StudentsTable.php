@@ -44,6 +44,13 @@ class StudentsTable
                     ->searchable()
                     ->sortable(),
                 
+                TextColumn::make('classRoom.name')
+                    ->label('Class')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->placeholder('Not assigned'),
+                
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable()
@@ -82,6 +89,13 @@ class StudentsTable
                     ->label('School')
                     ->searchable()
                     ->preload(),
+                
+                SelectFilter::make('class_room_id')
+                    ->relationship('classRoom', 'name')
+                    ->label('Class')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('All Classes'),
                 
                 SelectFilter::make('gender')
                     ->options([
