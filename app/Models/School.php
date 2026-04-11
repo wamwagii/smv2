@@ -29,4 +29,28 @@ class School extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    // ADD THIS - A school has many students
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    // ADD THIS - A school has many teachers
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class);
+    }
+
+    // ADD THIS - A school has many classrooms
+    public function classRooms()
+    {
+        return $this->hasMany(ClassRoom::class);
+    }
+
+    // ADD THIS - A school has many academic years
+    public function academicYears()
+    {
+        return $this->hasMany(AcademicYear::class);
+    }
 }

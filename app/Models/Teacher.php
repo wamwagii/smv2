@@ -40,6 +40,12 @@ class Teacher extends Model
         return $this->belongsTo(School::class);
     }
 
+    // ADD THIS - A teacher can be a class teacher for one class
+    public function classRoom()
+    {
+        return $this->hasOne(ClassRoom::class, 'class_teacher_id');
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";

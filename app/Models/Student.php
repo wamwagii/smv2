@@ -11,6 +11,7 @@ class Student extends Model
 
     protected $fillable = [
         'school_id',
+        'class_room_id',  // ← ADD THIS to fillable
         'admission_number',
         'first_name',
         'last_name',
@@ -37,6 +38,18 @@ class Student extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    // ← ADD THIS RELATIONSHIP
+    public function classRoom()
+    {
+        return $this->belongsTo(ClassRoom::class);
+    }
+
+    // ← ADD THIS RELATIONSHIP
+    public function studentFees()
+    {
+        return $this->hasMany(StudentFee::class);
     }
 
     public function getFullNameAttribute()
