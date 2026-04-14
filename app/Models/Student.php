@@ -11,7 +11,7 @@ class Student extends Model
 
     protected $fillable = [
         'school_id',
-        'class_room_id',  // ← ADD THIS to fillable
+        'class_room_id',  
         'admission_number',
         'first_name',
         'last_name',

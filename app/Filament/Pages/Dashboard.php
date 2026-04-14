@@ -6,7 +6,11 @@ use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
 {
-    // Header widgets - these appear at the top
+    // Remove or comment out these static properties if they cause issues
+    // protected static ?string $navigationIcon = 'heroicon-o-home';
+    // protected static ?string $navigationLabel = 'Dashboard';
+    // protected static ?int $navigationSort = 1;
+    
     protected function getHeaderWidgets(): array
     {
         return [
@@ -14,7 +18,11 @@ class Dashboard extends BaseDashboard
         ];
     }
     
-    // Main widgets - these appear in the main content area
+    protected function getFooterWidgets(): array
+    {
+        return [];
+    }
+    
     public function getWidgets(): array
     {
         return [
@@ -24,21 +32,23 @@ class Dashboard extends BaseDashboard
         ];
     }
     
-    // Override to ensure header widgets are shown
-    public function hasHeaderWidgets(): bool
-    {
-        return true;
-    }
-    
-    // Set columns for the main content area (2 columns for charts)
-    public function getColumns(): int | array
+    public function getColumns(): array|int
     {
         return 2;
     }
     
-    // Set custom title
     public function getTitle(): string
     {
         return 'School Management Dashboard';
+    }
+    
+    public function getHeading(): string
+    {
+        return 'Dashboard';
+    }
+    
+    public function getSubheading(): string
+    {
+        return 'Welcome back! Here\'s an overview of your school management system.';
     }
 }
